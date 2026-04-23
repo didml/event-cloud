@@ -10,11 +10,7 @@ import { NotificationEntity } from './notifications/entities/notification.entity
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT || 5432),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  url: process.env.DATABASE_URL,
   entities: [
     UserEntity,
     UserSettingsEntity,
@@ -26,7 +22,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     NotificationEntity,
   ],
   synchronize: true,
-  logging: false,
+  logging: true,
   ssl: {
     rejectUnauthorized: false,
   },
