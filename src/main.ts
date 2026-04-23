@@ -30,7 +30,14 @@ async function seedDemoData(dataSource: DataSource) {
         isActive: true,
       }),
     );
-    await settingsRepo.save(settingsRepo.create({ user, theme: 'dark', language: 'ua', iconChoice: 'tree' }));
+    await settingsRepo.save(
+      settingsRepo.create({
+        user,
+        theme: 'dark',
+        language: 'ua',
+        iconChoice: 'tree',
+      }),
+    );
   }
 
   const count = await eventsRepo.count({ where: { owner: { id: user.id } } });
@@ -66,6 +73,7 @@ async function seedDemoData(dataSource: DataSource) {
 
   const branch = await branchRepo.save(branchRepo.create({ event, title: 'Основа', state: 'progress' }));
   const branch2 = await branchRepo.save(branchRepo.create({ event, title: 'Команда', state: 'draft' }));
+
   await itemRepo.save([
     itemRepo.create({ branch, value: 'Release-check.md' }),
     itemRepo.create({ branch, value: 'Demo-sequence' }),
@@ -74,14 +82,20 @@ async function seedDemoData(dataSource: DataSource) {
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: '*',
+  });
+
   app.setGlobalPrefix('api');
 
   const dataSource = app.get(DataSource);
   await seedDemoData(dataSource);
 
-  await app.listen(3000);
-  console.log('Backend started on http://localhost:3000/api');
+  const port = Number(process.env.PORT || 10000);
+  await app.listen(port);
+  console.log(`Backend started on port ${port}`);
 }
 
 bootstrap();
