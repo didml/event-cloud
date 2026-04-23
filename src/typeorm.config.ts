@@ -23,7 +23,4 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   ],
   synchronize: true,
   logging: true,
-  ssl: {
-    rejectUnauthorized: false,
-  },
 };
